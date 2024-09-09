@@ -122,3 +122,4 @@ while True:
         mapstr += linestr
         ycounter += 1
     print(mapstr)
+    

@@ -2,7 +2,6 @@
 import random
 import time
 import sys
-
 # functions
 def cs():
     print('\033c')
@@ -13,7 +12,7 @@ def timeprint(text):
     "?" : 0.15,
     "," : 0.05,
     ":" : 0.1
-    
+
     }
     for char in text:
         sys.stdout.write(char)
