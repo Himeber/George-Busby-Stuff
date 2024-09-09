@@ -13,6 +13,7 @@ def timeprint(text):
     "?" : 0.15,
     "," : 0.05,
     ":" : 0.1
+    
     }
     for char in text:
         sys.stdout.write(char)
