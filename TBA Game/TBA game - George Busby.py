@@ -412,6 +412,7 @@ while True:
         timeprint("You have leveled up!")
         p.xp -= p.xpneeded
         p.level += 1
+        p.xpneeded += p.xpneeded * 1.5
         upgraded = False
         timeprint("Choose between one of three upgrades:")
         hpup = random.randint(p.level*2,p.level*5)
