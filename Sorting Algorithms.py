@@ -1,24 +1,40 @@
+import time
+def strandstatus(main,mid,sol,digit):
+    print("Main list: " + str(main))
+    print("Mid list: " + str(mid))
+    print("Solution list: " + str(sol))
+    print("Digit: " + str(digit))
 def strandsort(mainlist):
     runtime = 0
+    pos = 0
     notsorted = True
     digit = None
     midlist = []
     sollist = []
+    strt=time.perf_counter_ns()
     while notsorted:
         digit = mainlist[0]
         midlist.append(digit)
+        print("added " + str(digit) + " to mid")
         mainlist = mainlist[1:]
+        print("deleted " + str(digit) + " from main")
         for i in mainlist:
-            if i <= digit:
+            if i >= digit:
                 midlist.append(i)
-                mainlist = mainlist - i
+                print("added " + str(i) + " to mid")
+                mainlist = mainlist[0:pos:]
+                print("deleted " + str(i) + " from main")
+                strandstatus(mainlist,midlist,sollist,digit)
+            pos += 1 
         for i in midlist:
             sollist.append(i)
+            print("added " + str(i) + " to solution list")
         midlist = []
+        print("cleared midlist")
         if mainlist == []:
             notsorted = False
     return sollist
-import time
+
 def sortBitonically(lst):
     #[#inPair,#step,"what each step does"]
     s2=[[2,1,"S"]]
@@ -68,3 +84,4 @@ def genLst(leng):
         lst.remove(ch)
         lst2.append(ch)
     return lst2
+print(strandsort([9,1,5,3,8,6,7]))
