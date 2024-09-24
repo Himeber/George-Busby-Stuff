@@ -40,3 +40,11 @@ def sortBitonically(lst):
                 lst.append(j)
     end=time.perf_counter_ns()
     return (lst,strt,end,end-strt)
+def genLst(leng):
+    lst=[_ for _ in range(leng)]
+    lst2=[]
+    for i in range(len(lst)):
+        ch=choice(lst)
+        lst.remove(ch)
+        lst2.append(ch)
+    return lst2
