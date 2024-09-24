@@ -1,3 +1,5 @@
+import time
+from random import choice
 def strandsort(mainlist):
     runtime = 0
     notsorted = True
@@ -18,7 +20,6 @@ def strandsort(mainlist):
         if mainlist == []:
             notsorted = False
     return sollist
-import time
 def sortBitonically(lst):
     #[#inPair,#step,"what each step does"]
     s2=[[2,1,"S"]]
@@ -70,3 +71,24 @@ def genLst(leng):
         lst.remove(ch)
         lst2.append(ch)
     return lst2
+while True:
+    print("1. Bitonic\n2. Bubble\n3. Strand")
+    tp=input("What algorithim would you like to use? ")
+    match tp:
+        case "1":
+            dor=input("Would you like to generate a list? (y/n) ")
+            lst=[]
+            if dor=="y":
+                for i in range(8):
+                    lst.append(int(input("num 1-8: ")))
+            else:
+                lst=genLst(8).copy()
+            print("Starting list:",lst)
+            bil,bis,bie,bise=sortBitonically(lst)
+            print("The sorted list is:",bil)
+            print("It took",bise/1000000,"milliseconds! Isn't that speed!")
+        case "2":
+            print("Hey chat")
+        case _:
+            print("ERROR! That aint right enough!")
+            break
