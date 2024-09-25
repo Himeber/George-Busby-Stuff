@@ -112,10 +112,12 @@ def sortBitonically(lst,step):
                 mode=i[2][stp]
                 n1,n2=b[j][k],b[j][k+i[1]]
                 if mode=="S":
-                    print("We do SU on",n1,"and",n2)
+                    if step:
+                        print("We do SU on",n1,"and",n2)
                     n1,n2=min(n1,n2),max(n1,n2)
                 else:
-                    print("We do BU on",n1,"and",n2)
+                    if step:
+                        print("We do BU on",n1,"and",n2)
                     n1,n2=max(n1,n2),min(n1,n2)
                 b[j][k],b[j][k+i[1]]=n1,n2
                 stp+=1
