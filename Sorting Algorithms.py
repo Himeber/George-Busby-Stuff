@@ -1,73 +1,46 @@
 #chatboard
 #weeeeeeeeee
-#
+#kljhds kjds; dsakjg dsg jj gjs gkaks gk ds g gksa g kg g noyes
 import time
 from random import choice
 def strandmerge(thing,thing2,step):
     returner = []
-    pos = 0
-    while True:
-        if thing[pos]:
-            thingval = thing[pos]
+    count1 = 0
+    count2 = 0
+    if step:
+        print("Merging mid and endlists")
+    while count1 < len(thing) and count2 < len(thing2):
+        if thing[count1] <= thing2[count2]:
+            if step:
+                print("Added " + str(thing[count1]) + " to merged list")
+            returner.append(thing[count1])
+            count1 += 1
         else:
-            thingval = None
-        if step:
-            print("List 1 value: " + str(thingval))
-        if thing2[pos]:
-            thing2val = thing2[pos]
-        else:
-            thing2val = None
-        if step:
-            print("List 1 value: " + str(thingval))
-        if thingval or thing2val:
-            try:
-                if thingval > thing2val:
-                    returner.append(thing2val)
-                    if step:
-                        print("Added " + str(thing2val) + " to merge list")
-                elif thing2val > thingval:
-                    returner.append(thingval)
-                    if step:
-                        print("Added " + str(thingval) + " to merge list")
-                else:
-                    returner.append(thingval)
-                    if step:
-                        print("Added " + str(thingval) + " to merge list")
-            except:
-                print("ERROR")
-        else:
-            return(returner)
-def strandstatus(main,mid,sol,digit):
-    print("Main list: " + str(main))
-    print("Mid list: " + str(mid))
-    print("Solution list: " + str(sol))
+            if step:
+                print("Added " + str(thing2[count2]) + " to merged list")
+            returner.append(thing2[count2])
+            count2 += 1
+    returner.extend(thing[count1:])
+    returner.extend(thing2[count2:])
+    print("Set endlist to mergedlist")
+    return returner
 def strandSort(mainlist,step):
     midlist = []
     sollist = []
     strt=time.perf_counter_ns()
-    while notsorted:
-        digit = mainlist[0]
-        midlist.append(digit)
+    while mainlist:
+        midlist = [mainlist.pop(0)]
         if step:
-            print("added " + str(digit) + " to mid")
-            print("deleted " + str(digit) + " from main")
-        for i in mainlist:
-            if i >= digit:
-                midlist.append(i)
+            print("Moved " + str(midlist[-1]) + " from main to mid")
+        counter = 0
+        while counter < len(mainlist):
+            if midlist[-1] < mainlist[counter]:
+                midlist.append(mainlist.pop(counter))
                 if step:
-                    print("added " + str(i) + " to mid")
-                mainlist = mainlist[0:pos:]
-                if step:
-                    print("deleted " + str(i) + " from main")
-                strandstatus(mainlist,midlist,sollist,digit)
-            pos += 1 
-        for i in midlist:
-            sollist = strandmerge(midlist,sollist,step)
-        midlist = []
-        if step:
-            print("cleared midlist")
-        if mainlist == []:
-            notsorted = False
+                    print("Moved " + str(midlist[-1]) + " from main to mid")
+            else:
+                counter += 1
+        sollist = strandmerge(sollist,midlist,step)
     end=time.perf_counter_ns()
     return (sollist,strt,end,end-strt)
 #strand sort ends here
@@ -105,10 +78,12 @@ def sortBitonically(lst,step):
                 mode=i[2][stp]
                 n1,n2=b[j][k],b[j][k+i[1]]
                 if mode=="S":
-                    print("We do SU on",n1,"and",n2)
+                    if step:
+                        print("We do SU on",n1,"and",n2)
                     n1,n2=min(n1,n2),max(n1,n2)
                 else:
-                    print("We do BU on",n1,"and",n2)
+                    if step:
+                        print("We do BU on",n1,"and",n2)
                     n1,n2=max(n1,n2),min(n1,n2)
                 b[j][k],b[j][k+i[1]]=n1,n2
                 stp+=1
@@ -127,28 +102,54 @@ def bubbleSort(list,step):
         for j in range( 0,n-i-1):
             if step:
                 print("We check if",list[j],"is bigger than",list[j+1])
-            time.sleep(0.1)
+                time.sleep(0.1)
             if list[j]>list[j+1]:
                 if step:
                     print(list[j],"is bigger than",list[j+1])
-                time.sleep(0.1)
+                    time.sleep(0.1)
                 list[j], list[j+1] = list[j+1], list[j]
                 if step:
                     print("we have swapped the two values")
-                time.sleep(0.1)
+                    time.sleep(0.1)
                 swap=True
             else:
                 if step:
                     print(list[j],"is not bigger than",list[j+1])
-                time.sleep(0.1)
-                if step:
+                    time.sleep(0.1)
                     print("we don't swap them")
-                time.sleep(0.1)
+                    time.sleep(0.1)
         if (swap == False):
             break
     end=time.perf_counter_ns()
     return (list,strt,end,end-strt)
     
+def insertionSort(list,step):
+    strt=time.perf_counter_ns()
+    for i in range(1, len(list)):
+        n = list[i]
+        j = i - 1
+        if step:
+            print("we check if",n,"is smaller than",list[j])
+            time.sleep(0.1)
+        while j >= 0 and n < list[j]:
+            if step:
+                print(n,"is smaller than",list[j],"so we move it one to the left")
+                time.sleep(0.1)
+            list[j + 1] = list[j]
+            j -= 1
+            if step:
+                print("we check if",n,"is smaller than",list[j])
+                time.sleep(0.1)
+        if step:
+            print(n,"is not smaller than",list[j],"so it stays put")
+            time.sleep(0.1)
+        list[j + 1] = n
+    end=time.perf_counter_ns()
+    if step:
+        print("it is sorted and therefore is funi")
+        time.sleep(0.1)
+    return (list,strt,end,-5)
+
 def genLst(leng):
     lst=[_ for _ in range(leng)]
     lst2=[]
@@ -159,21 +160,24 @@ def genLst(leng):
     return lst2
 
 while True:
-    print("1. Bitonic\n2. Bubble\n3. Strand")
+    print("1. Bitonic\n2. Bubble\n3. Strand\n4. Insertion")
     tp=input("What algorithim would you like to use? ")
-    stp=input("Would you like to see every step? This affects porformance and readability so... (y/n) ")
     if tp in ["1","2","3"]:
+        stp=input("Would you like to see every step? This affects porformance and readability so... (y/n) ")
         if stp=="y":
             stp=True
         else:
             stp=False
         dor=input("Would you like to generate a list? (y/n) ")
+        ln=int(input("How long is this list? "))
+        if tp=="1":
+            ln=8
         lst=[]
         if dor=="y":
-            for i in range(8):
+            for i in range(ln):
                 lst.append(int(input("num 1-8: ")))
         else:
-            lst=genLst(8).copy()
+            lst=genLst(ln).copy()
         print("Starting list:",lst)
         match tp:
             case "1":
@@ -182,9 +186,13 @@ while True:
                 sortList,sortStart,sortEnd,sortLen=bubbleSort(lst,stp)
             case "3":
                 sortList,sortStart,sortEnd,sortLen=strandSort(lst,stp)
+            case "4":
+                sortList,sortStart,sortEnd,sortLen=insertionSort(lst,stp)
             case _:
                 print("ERROR! That aint right enough!")
                 break
         print("The sorted list is:",sortList)
         print("It took",sortLen/1000000,"milliseconds! Isn't that speed!")
-    
+    else:
+        print(choice(["No","That's wrong.","If you can't do this, go back to preschool!","Eat a fish.","That wasn't a possible choice!","Get a life.","Touch grass, aight!"]))
+        print("You basically inputted a wronger thing.\n\n\n\n\n\n\n")
