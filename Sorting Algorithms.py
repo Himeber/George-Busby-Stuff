@@ -41,12 +41,7 @@ def strandstatus(main,mid,sol,digit):
     print("Main list: " + str(main))
     print("Mid list: " + str(mid))
     print("Solution list: " + str(sol))
-    print("Digit: " + str(digit))
 def strandSort(mainlist,step):
-    runtime = 0
-    pos = 0
-    notsorted = True
-    digit = None
     midlist = []
     sollist = []
     strt=time.perf_counter_ns()
@@ -55,8 +50,6 @@ def strandSort(mainlist,step):
         midlist.append(digit)
         if step:
             print("added " + str(digit) + " to mid")
-        mainlist = mainlist[1:]
-        if step:
             print("deleted " + str(digit) + " from main")
         for i in mainlist:
             if i >= digit:
