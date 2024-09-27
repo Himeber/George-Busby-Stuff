@@ -217,6 +217,8 @@ while True:
                 lst.append(0)
         if len(lst)<50:
             print("Starting list:",lst)
+        else:
+            print("Starting!")
         match tp:
             case "1":
                 if len(lst)>16:
