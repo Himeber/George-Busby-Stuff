@@ -1,8 +1,9 @@
-#chatboard
+ #chatboard
 #weeeeeeeeee
 #kljhds kjds; dsakjg dsg jj gjs gkaks gk ds g gksa g kg g noyes
 import time
-from random import choice
+from math import floor,ceil,log2
+from random import choice,randint
 def strandmerge(thing,thing2,step):
     returner = []
     count1 = 0
@@ -22,7 +23,8 @@ def strandmerge(thing,thing2,step):
             count2 += 1
     returner.extend(thing[count1:])
     returner.extend(thing2[count2:])
-    print("Set endlist to mergedlist")
+    if step:
+        print("Set endlist to mergedlist")
     return returner
 def strandSort(mainlist,step):
     midlist = []
@@ -44,7 +46,32 @@ def strandSort(mainlist,step):
     end=time.perf_counter_ns()
     return (sollist,strt,end,end-strt)
 #strand sort ends here
+def compare_and_swap(a, i, j, direction):
+    if (direction == 1 and a[i] > a[j]) or (direction == 0 and a[i] < a[j]):
+        a[i], a[j] = a[j], a[i]
 
+def bitonic_merge(a, low, count, direction):
+    if count > 1:
+        k = count // 2
+        for i in range(low, low + k):
+            compare_and_swap(a, i, i + k, direction)
+        bitonic_merge(a, low, k, direction)
+        bitonic_merge(a, low + k, k, direction)
+
+def bitonic_sort(a, low, count, direction):
+    if count > 1:
+        k = count // 2
+        bitonic_sort(a, low, k, 1)
+        bitonic_sort(a, low + k, k, 0)
+        bitonic_merge(a, low, count, direction)
+    return a
+
+def run(a, direction=1):
+    strt=time.perf_counter_ns()
+    lst=bitonic_sort(a, 0, len(a), direction)
+    end=time.perf_counter_ns()
+    # print()
+    return (lst,strt,end,end-strt)
 def sortBitonically(lst,step):
     #[#inPair,#step,"what each step does"]
     s2=[[2,1,"S"]]
@@ -148,21 +175,23 @@ def insertionSort(list,step):
     if step:
         print("it is sorted and therefore is funi")
         time.sleep(0.1)
-    return (list,strt,end,-5)
+    return (list,strt,end,end-strt)
 
 def genLst(leng):
-    lst=[_ for _ in range(leng)]
+    # lst=[_ for _ in range(leng)]
     lst2=[]
-    for i in range(len(lst)):
-        ch=choice(lst)
-        lst.remove(ch)
+    for i in range(leng):
+        ch=randint(-leng,leng*2)
+        # lst.remove(ch)
         lst2.append(ch)
     return lst2
 
 while True:
     print("1. Bitonic\n2. Bubble\n3. Strand\n4. Insertion")
     tp=input("What algorithim would you like to use? ")
-    if tp in ["1","2","3"]:
+    if tp=="quit":
+        quit(2)
+    if tp in ["1","2","3","4"]:
         stp=input("Would you like to see every step? This affects porformance and readability so... (y/n) ")
         if stp=="y":
             stp=True
@@ -170,18 +199,34 @@ while True:
             stp=False
         dor=input("Would you like to generate a list? (y/n) ")
         ln=int(input("How long is this list? "))
-        if tp=="1":
-            ln=8
+        # if tp=="1" and ln>16:
+        #     ln=16
         lst=[]
         if dor=="y":
             for i in range(ln):
                 lst.append(int(input("num 1-8: ")))
         else:
             lst=genLst(ln).copy()
-        print("Starting list:",lst)
+        if tp=="1":
+            # mnE=floor(log2(ln))
+            mxE=ceil(log2(ln))
+            # print(mnE,mxE)
+            nds=(2**mxE)-ln
+            # print(nds,mnE,mxE,log2(ln),log2(8),log2(16))
+            # quit(1)
+            for i in range(0,nds):
+                lst.append(0)
+        if len(lst)<50:
+            print("Starting list:",lst)
+        else:
+            print("Starting!")
         match tp:
             case "1":
-                sortList,sortStart,sortEnd,sortLen=sortBitonically(lst,stp)
+                if len(lst)>16:
+                    ooga=run(lst)
+                else:
+                    ooga=sortBitonically(lst,stp)
+                sortList,sortStart,sortEnd,sortLen=ooga
             case "2":
                 sortList,sortStart,sortEnd,sortLen=bubbleSort(lst,stp)
             case "3":
@@ -191,7 +236,8 @@ while True:
             case _:
                 print("ERROR! That aint right enough!")
                 break
-        print("The sorted list is:",sortList)
+        if len(sortList)<50:
+            print("The sorted list is:",sortList)
         print("It took",sortLen/1000000,"milliseconds! Isn't that speed!")
     else:
         print(choice(["No","That's wrong.","If you can't do this, go back to preschool!","Eat a fish.","That wasn't a possible choice!","Get a life.","Touch grass, aight!"]))
