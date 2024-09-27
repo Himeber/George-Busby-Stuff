@@ -236,7 +236,7 @@ while True:
             case _:
                 print("ERROR! That aint right enough!")
                 break
-        if len(lst)<50:
+        if len(sortList)<50:
             print("The sorted list is:",sortList)
         print("It took",sortLen/1000000,"milliseconds! Isn't that speed!")
     else:
