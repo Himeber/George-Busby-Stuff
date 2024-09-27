@@ -23,7 +23,8 @@ def strandmerge(thing,thing2,step):
             count2 += 1
     returner.extend(thing[count1:])
     returner.extend(thing2[count2:])
-    print("Set endlist to mergedlist")
+    if step:
+        print("Set endlist to mergedlist")
     return returner
 def strandSort(mainlist,step):
     midlist = []
