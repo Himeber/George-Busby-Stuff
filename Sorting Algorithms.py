@@ -181,7 +181,7 @@ def genLst(leng):
     # lst=[_ for _ in range(leng)]
     lst2=[]
     for i in range(leng):
-        ch=randint(0,leng)
+        ch=randint(-leng,leng*2)
         # lst.remove(ch)
         lst2.append(ch)
     return lst2
@@ -214,7 +214,7 @@ while True:
             nds=(2**mxE)-ln
             # print(nds,mnE,mxE,log2(ln),log2(8),log2(16))
             # quit(1)
-            for i in range(nds):
+            for i in range(0,nds):
                 lst.append(0)
         if len(lst)<50:
             print("Starting list:",lst)
