@@ -1,6 +1,6 @@
  #chatboard
 #weeeeeeeeee
-#kljhds kjds; dsakjg dsg jj gjs gkaks gk ds g gksa g kg g noyes
+#kljhds kjds; dsakjg dsg jj gjs gkaks gk ds g gksa g kg g noyesno
 import time
 from math import floor,ceil,log2
 from random import choice,randint
@@ -36,7 +36,7 @@ def strandSort(mainlist,step):
             print("Moved " + str(midlist[-1]) + " from main to mid")
         counter = 0
         while counter < len(mainlist):
-            if midlist[-1] < mainlist[counter]:
+            if midlist[len(midlist)-1] < mainlist[counter]:
                 midlist.append(mainlist.pop(counter))
                 if step:
                     print("Moved " + str(midlist[-1]) + " from main to mid")
