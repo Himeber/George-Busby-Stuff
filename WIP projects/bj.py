@@ -45,6 +45,8 @@ class Card:
         self.value = value
     def __repr__(self):
         return(self.name)
+    def printable(self):
+        return(self.name)
 class Deck:
     def __init__(self):
         deck = []
@@ -82,6 +84,15 @@ class Deck:
     def __repr__(self):
         return str(self.cards)
 moneys = 1000
+yn = strput("Do you know how to play? (y/n)")
+if yn != "y":
+    timeprint("You are trying to get as close to 21 as possible, without going over 21.")
+    timeprint("Face cards are worth 10.")
+    timeprint("Aces are worth either 11 or 1, depending on whether or not that would go over 21.")
+    timeprint("The dealer will draw after you are done, and also try to get close to 21.")
+    timeprint("It will only stop when it will win, or is over 21.")
+    timeprint("If you win with exactly 21, you get 1.5 times your bet.")
+    strput("Press enter to continue.")
 while True:
     bet = -1
     deck = Deck()
@@ -89,6 +100,7 @@ while True:
     playerhand = []
     dealerhand = []
     game = True
+    turn = True
     while bet > moneys or bet < 25:
         cs(moneys)
         bet = intput("How much would you like to bet? Minimum of $25.")
@@ -110,18 +122,110 @@ while True:
         timeprint("The dealer has:")
         dpoints = 0
         daces = 0
-        for i in dealerhand:
-            timeprint(i)
-            if i.value != "ace":
-                dpoints += i.value
+        for i in range(len(dealerhand)):
+            card = dealerhand[i]
+            timeprint(card.printable())
+            if card.value != "ace":
+                dpoints += card.value
             else:
                 daces += 1
+        for i in range(daces):
+            if dpoints > 11 - daces:
+                dpoints += 1
+            else:
+                dpoints += 11
+        timeprint("This adds up to " + str(dpoints) + " points.")
         timeprint("You have:")
         ppoints = 0
         paces = 0
-        for i in playerhand:
-            timeprint(i)
-            if i.value != "ace":
-                ppoints += i.value
+        for i in range(len(playerhand)):
+            card = playerhand[i]
+            timeprint(card.printable())
+            if card.value != "ace":
+                ppoints += card.value
             else:
                 paces += 1
+        for i in range(paces):
+            if ppoints > 11 - paces:
+                ppoints += 1
+            else:
+                ppoints += 11
+        timeprint("This adds up to " + str(ppoints) + " points.")
+        while turn:
+            if ppoints > 21:
+                turn = False
+            else:
+                action = strput("Do you want to draw another card? (y/n)")
+                if action != "y":
+                    turn = False
+                else:
+                    timeprint("You drew a " + deck.cards[0].printable() + ".")
+                    playerhand.append(deck.cards.pop(0))
+                    timeprint("You have:")
+                    ppoints = 0
+                    paces = 0
+                    for i in range(len(playerhand)):
+                        card = playerhand[i]
+                        timeprint(card.printable())
+                        if card.value != "ace":
+                            ppoints += card.value
+                        else:
+                            paces += 1
+                    for i in range(paces):
+                        if ppoints > 11 - paces:
+                            ppoints += 1
+                        else:
+                            ppoints += 11
+                    timeprint("This adds up to " + str(ppoints) + " points.")
+        timeprint("It's the dealer's turn.")
+        while dpoints < ppoints and dpoints <= 21 and ppoints < 21:
+            timeprint("The dealer draws a card.")
+            timeprint("He drew a " + deck.cards[0].printable() + ".")
+            dealerhand.append(deck.cards.pop(0))
+            for i in range(len(dealerhand)):
+                card = dealerhand[i]
+                if card.value != "ace":
+                    dpoints += card.value
+                else:
+                    daces += 1
+            for i in range(daces):
+                if dpoints > 11 - daces:
+                    dpoints += 1
+                else:
+                    dpoints += 11
+            timeprint("The dealer has " + str(dpoints) + " points.")
+        game = False
+    if ppoints > 21:
+        timeprint("You lose. Stay under 21 points!")
+        win = False
+    elif dpoints > 21:
+        timeprint("The dealer lost. He had over 21 points.")
+        win = True
+    elif dpoints < ppoints:
+        timeprint("You won! The dealer had " + str(dpoints) + " points. You had " + str(ppoints) + ".")
+        win = True
+    elif ppoints < dpoints:
+        timeprint("You lost. The dealer had " + str(dpoints) + " points. You had " + str(ppoints) + ".")
+        win = False
+    elif ppoints == dpoints:
+        timeprint("You tied at " + str(ppoints) + " points.")
+        timeprint("Flipping a coin. . .")
+        coin = random.randint(0,1)
+        if coin == 1:
+            timeprint("You won!")
+            win = True
+        else:
+            timeprint("You lost.")
+            win = False
+    else:
+        timeprint("error lol")
+        exit()
+    strput("Press enter to continue.")
+    if win:
+        if ppoints == 21:
+            timeprint("You got a bonus for getting 21 points.")
+            moneys += bet*2.5
+            timeprint("You got $" + str(bet * 2.5) + ".")
+        else:
+            timeprint("You got $" + str(bet*2) + ".")
+            moneys += bet*2
