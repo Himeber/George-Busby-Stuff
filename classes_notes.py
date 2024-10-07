@@ -21,7 +21,7 @@ class Animal:
             other.losses += 1
             self.losses += 1
             return "tie"
-    #Makes a readable string when str() is used or printed
+    #Makes a readable string when str() is used or printedededededed
     def __str__(self):
         printer = self.name + " - " + self.gender + " " + self.species + " -  Age " + str(self.age) + "\nRarity - " + self.rarity + " - "
         if self.likesPlastic:
