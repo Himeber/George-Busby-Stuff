@@ -35,3 +35,4 @@ bear = Animal("Bear","Bear",87621579163497617839465987263729876439,'',"nuclear",
 print(bear)
 print(mup.fight(bear))
 mup = None
+print(mup)
