@@ -126,12 +126,11 @@ class Spell:
         self.stun = False
         self.crit = False
         self.critchance = 0
+        self.costtype = costtype
     def __repr__(self):
         thing = line() + "\n" + self.name + " | Cost: " + str(self.cost) + " " + self.costtype + "\n" + line()
         if self.damage > 0:
             thing += "\nDamage: " + str(self.damage)
-        if self.defence > 0:
-            thing += "\nIncreases defence by " + str(self.defence)
         try:
             if self.heal > 0:
                 thing += "\nHeals by  " + str(self.heal)
@@ -158,3 +157,5 @@ heal.heal = 10
 bonk = Spell("Bonk")
 bonk.stun = True
 bonk.damage = 10
+player.skills.append(fireball)
+player.skills.append(bonk)
