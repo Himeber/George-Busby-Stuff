@@ -27,7 +27,38 @@ while running:
     print("G: Sort by genre")
     print("T: Search by title")
     print("D: Search by director")
-    print("A: Search by cast")
+    print("S: Search by cast")
     print("X: Exit")
     print(line())
-    action = input("What do you want to do?\n> ")
+    action = input("What do you want to do?\n> ").lower()
+    if action == "x":
+        running = False
+    elif action == "v":
+        for i in movies:
+            print(i)
+    elif action == "a":
+        movies = sorted(movies, key=lambda x: x.title.lower())
+    elif action == "c":
+        movies = sorted(movies, key=lambda x: x.year)
+    elif action == "g":
+        movies = sorted(movies, key=lambda x: x.genre.lower())
+    elif action == "t":
+        searchby = input("What title to search by?\n>")
+        for i in movies:
+            if searchby in i.title:
+                print(i)
+    elif action == "d":
+        searchby = input("What director to search by?\n>")
+        for i in movies:
+            if searchby in i.director:
+                print(i)
+    elif action == "s":
+        searchby = input("What cast member to search by?\n>")
+        for i in movies:
+            printed = False
+            for j in i.cast:
+                if searchby in j:
+                    if not printed:
+                        print(i)
+                        printed = True
+    input("Press enter to continue.")        
