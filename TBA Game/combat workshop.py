@@ -59,6 +59,10 @@ def combat(enemy):
                     if action in player.skills:
                         ability = player.skills(action)
                         damage = ability.damage * (1+(player.damage/10))
+                        if damage != 0:
+                            damage -= enemy.defence
+                            if damage < 0:
+                                damage = 0
                         try:
                             if ability.heal >= 0:
                                 heal = ability.heal
@@ -76,11 +80,7 @@ def combat(enemy):
                             timeprint("You use " + ability.name + ".")
                         elif costtype == "Mana":
                             timeprint("You cast " + ability.name + ".")
-                        if damage != 0:
-                            damage -= enemy.defence
-                            if damage < 0:
-                                damage = 0
-                            enemy.hp = enemy.hp - damage
+                        enemy.hp = enemy.hp - damage
                         timeprint("You dealt " + str(damage) + " damage.")
                         timeprint("The " + enemy.name + " has " + str(enemy.hp) + " hp.")
                         if heal > 0:
