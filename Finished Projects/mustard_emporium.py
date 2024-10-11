@@ -39,7 +39,7 @@ def line():
     return "-----------------------"
 #one method must be new type
 class Fud:
-    def __init__(self,name,cost):
+    def __init__(self,name=None,cost=None):
         self.name = name
         self.cost = cost
     def __str__(self):
@@ -54,7 +54,7 @@ class Fud:
         mustard.cost = 69.99
         return mustard
 class Order:
-    def __init__(self,drink=Fud("Air",0),appetizer=Fud("Air",0),maincourse=Fud("Air",0),side1=Fud("Air",0),side2=Fud("Air",0),dessert=Fud("Air",0)):
+    def __init__(self,drink=Fud("air",0),appetizer=Fud("air",0),maincourse=Fud("air",0),side1=Fud("air",0),side2=Fud("air",0),dessert=Fud("air",0)):
         self.drink = drink
         self.appetizer = appetizer
         self.maincourse = maincourse
@@ -64,7 +64,7 @@ class Order:
         self.cost = 0
     def __str__(self):
         return f"""{line()}
-Order:
+Order - ${str(self.cost)}
 {line()}
 Drink: {self.drink}
 Appetizer: {self.appetizer}
@@ -88,23 +88,28 @@ Cost: ${str(self.cost)}
         if self.dessert != None:
             cost += self.dessert.cost
         self.cost = cost
+    def calculateTaxes(self):
+        	self.cost = self.cost * 1.0775
 menu = {
     "Drinks":[Fud.tenPoundsOfMustard(),Fud("Fountain Drink",1.99),Fud("Lemonade",1.50),Fud("Water",0),Fud("Acid",-3475867.00)],
-    "Appetizers":[Fud.tenPoundsOfMustard(),Fud("Chips",1.15),Fud("Sliced Fried Potatoes",1.15),Fud("British Fries",1.15),Fud("Weapons-Grade Uranium",130.78)],
+    "Appetizers":[Fud.tenPoundsOfMustard(),Fud("Chips",1.15),Fud("Sliced Fried Potatoes",1.15),Fud("British Crisps",1.15),Fud("Weapons-Grade Uranium",130.78)],
     "Main Courses":[Fud.tenPoundsOfMustard(),Fud("A hot dog",2.50),Fud("BORGOR",5.99),Fud("Steak but someone forgot to put the period in the price",999),Fud("Several pounds of firecrackers",45.00)],
     "Sides":[Fud.tenPoundsOfMustard(),Fud("Refried Beans",3.49),Fud("Nachos",5.25),Fud("Extra mustard",1.49),Fud("Pain",-1997.42)],
     "Desserts":[Fud.tenPoundsOfMustard(),Fud("A Gallon of Ice Cream",6.99),Fud("A Gallon of Iced Crem",0.10),Fud("C O O K I E",2.99),Fud("The store's entire supply of cleaning fluid",-6891762135)]
 }
 ordering = True
 order = Order()
+taxesPaid = False
 while ordering:
+    order.updatecost()
     cs()
-    print("~-Mustard Emporium-~")
+    print("\_Mustard Emporium_/")
     print(line())
     timeprint("Options:")
-    timeprint("V: View Order")
-    timeprint("M: View Menu")
+    timeprint("V: View order")
+    timeprint("M: View menu")
     timeprint("O: Add an item to your order")
+    timeprint("TAXES: Calculate the taxes on your order")
     timeprint("MUSTARD: Turn your order into a lot of mustard")
     timeprint("X: Check out")
     action = strput("What would you like to do?").lower()
@@ -117,7 +122,6 @@ while ordering:
             print(line())
             for j in menu[i]:
                 print(j)
-            time.sleep(1)
     elif action == "o":
         worked = False
         while not worked:
@@ -129,7 +133,7 @@ while ordering:
             else:
                 timeprint(f"You can't order {typ}!")
                 timeprint("You can only order a drink, appetizer, main course, side, or dessert.")
-        if typ == 'sides':
+        if typ == 'Sides':
             worked = False
             while not worked:
                 slot = intput("Which side slot do you want to order, 1 or 2?")
@@ -159,31 +163,40 @@ while ordering:
             pass
         else:
             item = menu[typ][number-1]
-            if typ == 'side':
+            if typ == 'Sides':
                 if slot == 1:
                     order.side1 = item
                 elif slot == 2:
                     order.side2 = item
-            elif typ == "drink":
+            elif typ == "Drinks":
                 order.drink = item
-            elif typ == 'main course':
+            elif typ == 'Main Courses':
                 order.maincourse = item
-            elif typ == "appetizer":
+            elif typ == "Appetizers":
                 order.appetizer = item
-            elif typ == "dessert":
+            elif typ == "Desserts":
                 order.dessert = item
+            taxesPaid = False
     elif action == "mustard":
         order.drink = order.drink.tenPoundsOfMustardize()
         order.appetizer = order.appetizer.tenPoundsOfMustardize()
         order.maincourse = order.maincourse.tenPoundsOfMustardize()
-        order.side1.tenPoundsOfMustardize()
-        order.side2.tenPoundsOfMustardize()
-        order.dessert.tenPoundsOfMustardize()
+        order.side1 = order.side1.tenPoundsOfMustardize()
+        order.side2 = order.side2.tenPoundsOfMustardize()
+        order.dessert = order.dessert.tenPoundsOfMustardize()
         timeprint("M U S T A R D\n...\nA P P L I E D")
     elif action == "x":
         timeprint("Checking out...")
         order.updatecost()
         ordering = False
+    elif action == "taxes":
+        if taxesPaid:
+            timeprint("You already calculated your taxes.")
+        else:
+            timeprint("Calculating taxes...")
+            order.updatecost()
+            order.calculateTaxes()
+            taxesPaid = True
     strput("Press enter to continue.")
 cs()
 timeprint(f"You had a great time eating {order.appetizer.name} and drinking {order.drink.name} while waiting for your meal to arrive.")
@@ -191,6 +204,30 @@ timeprint(f"When your {order.maincourse.name} arrived, you consumed it along wit
 timeprint(f"You then had a delicious dessert of {order.dessert.name}.")
 timeprint(f"Afterward, you paid the bill of ${str(order.cost)}.")
 timeprint(f"As you were leaving, you had a customary ten pounds of mustard dropped on you. Nice!")
+if taxesPaid:
+    pass
+else:
+    timeprint("You then got arrested for not paying sales tax.")
 print(line())
 timeprint("Your order was:")
-print(order)
+timeprint(str(order))
+timeprint("Thanks for ordering at the Mustard Emporium!")
+mustardIngested = 0
+if order.appetizer.name == "Ten Pounds of Mustard":
+    mustardIngested += 10
+if order.drink.name == "Ten Pounds of Mustard":
+    mustardIngested += 10
+if order.maincourse.name == "Ten Pounds of Mustard":
+    mustardIngested += 10
+if order.side1.name == "Ten Pounds of Mustard":
+    mustardIngested += 10
+if order.side2.name == "Ten Pounds of Mustard":
+    mustardIngested += 10
+if order.dessert.name == "Ten Pounds of Mustard":
+    mustardIngested += 10
+if mustardIngested > 0:
+    timeprint(f"You ingested {str(mustardIngested)} pounds of mustard.")
+    if mustardIngested == 60:
+        timeprint("You were rushed to the hospital.")
+        timeprint("Turns out eating 50% of your body weight in mustard is fatal.")
+        timeprint("you dieded :(")
