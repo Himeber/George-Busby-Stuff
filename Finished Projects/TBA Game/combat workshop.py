@@ -38,63 +38,47 @@ def line():
     return "-----------------------"
 def combat(enemy):
     global player
-    pstunned = False
-    estunned = False
     turn = "player"
     while player.hp > 0 and enemy.hp > 0:
         if turn == "player":
-            if pstunned:
+            if player.stunned:
                 timeprint("You are stunned and cannot act.")
-                pstunned = False
+                player.stunned = False
                 turn = "enemy"
             else:
                 timeprint("It is your turn.")
-                action = strput("What would you like to do?").lower
+                action = strput("What would you like to do?").lower()
                 if action == "attack":
                     damage = round(player.atk * (0.75 + random.random()),1)-enemy.defence
                     timeprint("You hit the enemy for " + str(damage - enemy.defence) + " damage.")
                     enemy.hp = enemy.hp - damage
                     timeprint("The " + enemy.name + " has " + str(enemy.hp) + " hp.")
-                else:
+                elif "cast" in action:
+                    action = action[5:]
                     if action in player.skills:
-                        ability = player.skills(action)
-                        damage = ability.damage * (1+(player.damage/10))
-                        if damage != 0:
-                            damage -= enemy.defence
-                            if damage < 0:
-                                damage = 0
-                        try:
-                            if ability.heal >= 0:
-                                heal = ability.heal
-                        except:
-                            if ability.heal == "lifesteal":
-                                heal = ability.damage
-                        if ability.crit:
-                            critchance = ability.critchance
+                        ability = player.skills[action]
+                        damage,healing,stunned = ability.use(enemy)
+                        if damage == "no":
+                            timeprint(f"You don't have enough {ability.costtype} to use {ability.name}.")
                         else:
-                            critchance = 0
-                        stun = ability.stun
-                        cost = ability.cost
-                        costtype = ability.costtype
-                        if costtype == "Energy":
-                            timeprint("You use " + ability.name + ".")
-                        elif costtype == "Mana":
-                            timeprint("You cast " + ability.name + ".")
-                        enemy.hp = enemy.hp - damage
-                        timeprint("You dealt " + str(damage) + " damage.")
-                        timeprint("The " + enemy.name + " has " + str(enemy.hp) + " hp.")
-                        if heal > 0:
-                            if heal > (player.maxhp - player.hp):
-                                heal = player.maxhp - player.hp
-                            timeprint("You healed for " + str(heal) + " hp.")
-                            player.hp += heal
+                            timeprint(f"You use {ability.name}.")
+                            if damage > 0:
+                                timeprint(f"You dealt {str(damage)} damage.")
+                            if healing > 0:
+                                timeprint(f"You healed for {str(healing)} HP.")
+                            if stunned:
+                                timeprint("You stunned the enemy.")
+                            turn = "enemy"
                     else:
-                        timeprint("You do not have that ability.")
+                        timeprint(f"You do not have the ability to use {str(action)}.")
         elif turn == "enemy":
-            if estunned:
+            if enemy.stunned:
                 timeprint("The enemy is stunned and cannot act.")
-                estunned = False
+                enemy.stunned = False
                 turn = "player"
+            else:
+                damage = enemy.atk * (random.random() + 0.5)
+                damage -= player.defence
 class Player:
     def __init__(self):
         self.name = None
@@ -102,7 +86,10 @@ class Player:
         self.atk = 0
         self.defence = 0
         self.energy = 25
+        self.maxenergy = 100
         self.mana = 25
+        self.maxmana = 100
+        self.stunned = False
         self.skills = {
 
         }
@@ -117,15 +104,16 @@ class Enemy:
         self.maxhp = hp
         self.atk = atk
         self.defence = defence
+        self.stunned = False
 class Spell:
-    def __init__(self,name,cost=0,costtype="Energy",damage=0,heal=0,stun=0,crit=0,critchance=0):
+    def __init__(self,name,cost=0,costtype="Energy",damage=0,heal=0,stun=False,crit=False,critchance=0):
         self.name = name
-        self.damage = 0
-        self.heal = 0
-        self.cost = 0
-        self.stun = False
-        self.crit = False
-        self.critchance = 0
+        self.damage = damage
+        self.heal = heal
+        self.cost = cost
+        self.stun = stun
+        self.crit = crit
+        self.critchance = critchance
         self.costtype = costtype
     def __repr__(self):
         thing = line() + "\n" + self.name + " | Cost: " + str(self.cost) + " " + self.costtype + "\n" + line()
@@ -144,18 +132,65 @@ class Spell:
             thing += "\nHas a " + str(self.critchance) + "% chance to crit the enemy"
         thing += "\n" + line()
         return(thing)
+    def __str__(self):
+        thing = line() + "\n" + self.name + " | Cost: " + str(self.cost) + " " + self.costtype + "\n" + line()
+        if self.damage > 0:
+            thing += "\nDamage: " + str(self.damage)
+        try:
+            if self.heal > 0:
+                thing += "\nHeals by  " + str(self.heal)
+        except:
+            pass
+        if self.heal == "lifesteal":
+            thing += "\nLifesteal"
+        if self.stun:
+            thing += "\nStuns the enemy"
+        if self.crit:
+            thing += "\nHas a " + str(self.critchance) + "% chance to crit the enemy"
+        thing += "\n" + line()
+        return(str(thing))
+    def use(self,target):
+        global player
+        canUse = False
+        damage = self.damage * (1+(player.atk/10))
+        if self.costtype == 'Energy':
+            if player.energy >= self.cost:
+                canUse = True
+                player.energy -= self.cost
+            else:
+                pass
+        elif self.costtype == 'Mana':
+            if player.mana >= self.cost:
+                canUse = True
+                player.mana -= self.cost
+            else:
+                pass
+        if not canUse:
+            return "no","no","no"
+        if self.crit:
+            rng = random.random()
+            if rng < self.critchance/100:
+                damage *= 2
+        if damage != 0:
+            damage -= target.defence
+        if damage < 0:
+            damage = 0
+        healing = self.heal
+        if healing == "lifesteal":
+            healing = damage
+        if self.stun:
+            target.stunned=True
+        target.hp -= damage
+        player.hp += healing
+        return int(damage),int(healing),self.stun
 global player
 player = Player()
 cs()
-fireball = Spell("Fireball")
-fireball.damage = 25
-fireball.crit = True
-fireball.critchance = 25
+fireball = Spell("Fireball",5,"Mana",10,0,False,True,25)
 print(fireball)
-heal = Spell("Heal")
-heal.heal = 10
-bonk = Spell("Bonk")
-bonk.stun = True
-bonk.damage = 10
-player.skills.append(fireball)
-player.skills.append(bonk)
+heal = Spell("Heal",5,"Mana",0,10)
+bonk = Spell("Bonk",5,"Energy",15,0,True,True,5)
+player.skills["fireball"] = fireball
+player.skills["bonk"] = bonk
+player.skills['heal'] = heal
+combat(Enemy())
