@@ -5,6 +5,7 @@ class PetStore:
         self.animals = animals
         self.fatpet = None
     def addpet(self,animal):
+        #assert makes sure its an animal and if not ends program
         assert isinstance(animal,Animal)
         self.animals.append(animal)
     def killpet(self,animal):
@@ -52,10 +53,12 @@ class Animal:
         return (self.name, "yummy wee", self.diet)
 #dis is how u subclass :)
 class Mammal(Animal):
-    diet = "plastic"
-class Cat(Animal):
+    def __init__(self,name,diet):
+        super().__init__(name) # this makes the animal class take care of the name
+        self.diet = diet
+class Cat(Mammal):
     diet = "mice"
-class Dog(Animal):
+class Dog(Mammal):
     diet = "dog"
 class Reptile(Animal):
     diet = "mcdonalds"
@@ -79,5 +82,6 @@ store.addpet(Turtle("Straw"))
 store.addpet(Turtle("Straw"))
 store.addpet(Turtle("Straw"))
 store.addpet(Turtle("Straw"))
+store.addpet(Reptile("usadkgfuya"))
 print(store.animals)
 store.forcefeed()

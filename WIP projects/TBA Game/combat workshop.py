@@ -64,6 +64,9 @@ class Player:
         self.abiities = {
             
         }
+        self.spells = {
+
+        }
         self.passives = []
         self.basicattack = Ability("Attack",0,None,1,0,False)
     def __repr__(self):
@@ -74,11 +77,13 @@ HP: {str(self.hp)}/{str(self.maxhp)} | Energy: {str(self.energy)}/{str(self.maxe
 Attack: {str(self.attack)} | Defence: {str(self.defence)} | Speed: {str(self.speed)}
 {line()}{line()}
 """))
+
     def abilitiesList(self):
         for i in self.abiities:
             j = self.abiities[i]
             timeprint(j)
             timeprint(line())
+
     def refreshPassives(self):
         attack = 0
         hp = 0
@@ -108,11 +113,13 @@ class Enemy:
         self.attack = attack
         self.defence = defence
         self.skills = skills
+
     def __repr__(self):
         return str(f"""{line()}
 {self.name} - {str(self.hp)}/{str(self.maxhp)} HP
 {line()}
 """)
+
 class Ability:
     def __init__(self,name,cost,costType,damage,healing,stun,stunturns=1,crit=False,critchance=0):
         self.name = name
@@ -125,13 +132,28 @@ class Ability:
         self.crit = crit
         self.critchance=critchance
         self.special = None
+
     def __repr__(self):
-        return str(f"""{line()}
+        returner = str(f"""{line()}
 {self.name} - Costs {str(self.cost)} {self.costtype}
 {line()}
-Damage: {str(self.damage)}%
-Heals you for {ste(self.healing)} HP
 """)
+    if self.damage > 0:
+        returner += f"\nDoes {str(self.damage)}x damage"
+    if self.healing == "lifesteal":
+        returner += f"\nHas lifesteal"
+    elif self.healing > 0:
+        returner += f"\nHeals you for {str(self.healing)} HP"
+    if self.stun:
+        if self.stunturns > 1:
+            returner += f"\nStuns enemy for {str(stunturns)} turn"
+        else:
+            returner += f"\nStuns enemy for 1 turn"
+    if self.crit:
+        returner += f"Has a {str(self.critchance)}% chance to crit"
+    returner += "\n" + line()
+    return returner
+
 class Passive:
     def __init__(self,name,atk=0,defence=0,hp=0,mana=0,energy=0,speed=0,crit=False,critchance=0,special=None):
         self.name = name
@@ -144,6 +166,7 @@ class Passive:
         self.mana = 0
         self.speed = 0
         self.special = special
+
 class Path:
     def __init__(self,name):
         self.name = name
@@ -153,10 +176,22 @@ class Path:
         self.passivesAtLevels = {
 
         }
+        self.evolution = None
+
     def addAbility(self,ability,level):
         self.abilitesAtLevels[level] = ability
-    def addPassove(self,passive,level):
+
+    def addPassive(self,passive,level):
         self.passivesAtLevels[level] = passive
-player = Player("bob",100,10,10,10,100,100,0,1000,1)
+
+cs()
+name = strput("What is your name?")
+player = Player(name,100,10,10,10,100,100,0,1000,1)
 paths = []
+squire = Path("Squire")
+apprentice = Path("Apprentice")
+thief = Path("Thief")
+ranger = Path("Ranger")
+squire.addAbility(Ability("Power Attack",25,"Energy",1.5,0,False,1,True,10))
+apprentice.addAbility(Ability("Mana Blast",25,"Mana",1.5,0,False,0,True,10))
 print(str(player))
