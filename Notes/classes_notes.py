@@ -1,7 +1,7 @@
 #Start classes with the keyword class and name using PascalCase
 class Animal:
     #Start with a constructor
-    def __init__(self,name,species,age,gender,rarity,likesPlastic=False):
+    def __init__(self,name="Bob",species="Bob",age=-5,gender="physics",rarity="56",likesPlastic=False):
         self.name = name
         self.species = species
         self.age = age
@@ -29,10 +29,5 @@ class Animal:
         else:
             printer += "Does not like eating plastic"
         return printer
-mup = Animal("Mup","Object of mass destruction",-2,"Nonexistent","no",True)
-print(mup)
-bear = Animal("Bear","Bear",87621579163497617839465987263729876439,'',"nuclear",True)
-print(bear)
-print(mup.fight(bear))
-mup = None
-print(mup)
+    def getname(self):
+        return self.name

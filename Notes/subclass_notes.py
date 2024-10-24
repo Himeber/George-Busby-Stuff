@@ -45,7 +45,7 @@ class PetStore:
     def get_by_type(self,typ):
         return [pet for pet in self.animals if isinstance(pet,typ)]
 class Animal: 
-    def __init__(self,name):
+    def __init__(self,name="Bob"):
         self.name = name
     def __repr__(self):
         return(f"This is {self.name}")
@@ -68,19 +68,6 @@ class Snake(Reptile):
 class Turtle(Reptile):
     diet = "livers"
 store = PetStore("McDonalds",1997392)
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
-store.addpet(Turtle("Straw"))
 store.addpet(Turtle("Straw"))
 store.addpet(Reptile("usadkgfuya"))
 print(store.animals)
