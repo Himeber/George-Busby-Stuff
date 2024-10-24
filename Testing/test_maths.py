@@ -12,4 +12,3 @@ def test_divide():
     assert divide(2,10) == 0.2
 def test_multiply():
     assert multiply(2,10) == 2
-assert("hi" ==  "Fail on purpose")
