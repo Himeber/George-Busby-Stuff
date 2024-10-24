@@ -89,7 +89,8 @@ Cost: ${str(self.cost)}
             cost += self.dessert.cost
         self.cost = cost
     def calculateTaxes(self):
-        	self.cost = self.cost * 1.0775
+        self.updatecost()
+        self.cost = round(self.cost * 1.0775,2)
 menu = {
     "Drinks":[Fud.tenPoundsOfMustard(),Fud("Fountain Drink",1.99),Fud("Lemonade",1.50),Fud("Water",0),Fud("Acid",-3475867.00)],
     "Appetizers":[Fud.tenPoundsOfMustard(),Fud("Chips",1.15),Fud("Sliced Fried Potatoes",1.15),Fud("British Crisps",1.15),Fud("Weapons-Grade Uranium",130.78)],
