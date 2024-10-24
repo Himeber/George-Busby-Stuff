@@ -6,13 +6,15 @@ import sys
 # functions
 def cs():
     print('\033c')
+
 def timeprint(text):
     punctuation = {
     "." : 0.25,
     "!" : 0.15,
     "?" : 0.15,
     "," : 0.05,
-    ":" : 0.1
+    ":" : 0.1,
+    "\n": 0.25
     }
     for char in text:
         sys.stdout.write(char)
@@ -23,6 +25,7 @@ def timeprint(text):
             time.sleep(random.random()/25)
     print()
     time.sleep(0.25)
+
 def intput(text):
     while True:
         try:
@@ -31,10 +34,11 @@ def intput(text):
             return int(ans)
         except:
             timeprint("That is not a number. Try again.")
+
 def strput(text):
     timeprint(text)
     ans = input("> ")
     return str(ans)
+
 def line():
     return "-----------------------"
-    
