@@ -86,18 +86,3 @@ class Sundae(IceCream):
 ${str(self.pricePerScoop)} per scoop
 Topped with {self.toppingName}
 Topping costs ${str(self.toppingPrice)}""")
-
-
-desserts = []
-fub = DessertItem("Mustard")
-chocolateIceCream = IceCream("Chocolate",1,2.49)
-bananaSplit = Sundae("Banana Split",1,2.49,"banana",0.49)
-chocolateChip = Cookie("Chocolate Chip",1,24.99)
-desserts.append(chocolateChip)
-desserts.append(bananaSplit)
-desserts.append(chocolateIceCream)
-desserts.append(fub)
-print(line())
-for i in desserts:
-    timeprint(str(i))
-    print(line())

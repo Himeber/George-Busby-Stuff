@@ -1,4 +1,4 @@
-from maths import (
+from Notes.maths import (
     add,
     subtract,
     divide,
