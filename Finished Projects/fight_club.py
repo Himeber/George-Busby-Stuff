@@ -128,7 +128,7 @@ for i in range(0,random.randint(0,5)):
 for i in range(0,random.randint(0,5)):
     peoples.append(Hobo("Hobo " + str(i+1)))
 fighting = True
-
+speedmode = strput("Speed mode?").lower()
 while fighting:
     rng = random.randint(0,len(peoples)-1)
     guy1 = peoples[rng]
@@ -139,10 +139,12 @@ while fighting:
         guy2 = peoples[rng2]
         if len(peoples) <=1:
             break
-    timeprint(guy1.fight(guy2))
-    timeprint(guy2.fight(guy1))
+    if speedmode != "y":
+        timeprint(guy1.fight(guy2))
+        timeprint(guy2.fight(guy1))
     if guy1.hp <= 0:
-        timeprint(f"{guy1.name} has dieded :(")
+        if speedmode != "y":
+            timeprint(f"{guy1.name} has dieded :(")
         peoples.pop(rng)
         del guy1
     if guy2.hp <= 0:
